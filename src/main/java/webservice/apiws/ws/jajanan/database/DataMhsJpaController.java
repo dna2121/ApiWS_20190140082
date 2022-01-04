@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,8 @@ import webservice.apiws.ws.jajanan.database.exceptions.PreexistingEntityExceptio
  *
  * @author HP
  */
+
+//path variable untuk fokus ke nim?
 @RestController
 public class DataMhsJpaController implements Serializable {
 
@@ -42,7 +45,10 @@ public class DataMhsJpaController implements Serializable {
     public DataMhsJpaController() {
     }
 
-    public void create(DataMhs dataMhs) throws PreexistingEntityException, Exception {
+    //CREATE
+    @ResponseBody
+    @PostMapping(value = "/post")
+    public void create(@RequestBody DataMhs dataMhs) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -61,6 +67,7 @@ public class DataMhsJpaController implements Serializable {
         }
     }
 
+    //UPDATE
     @ResponseBody
     @RequestMapping(value = "/put/{nim}", method = RequestMethod.PUT)
     public void edit(@RequestBody DataMhs dataMhs) throws NonexistentEntityException, Exception {
@@ -86,6 +93,7 @@ public class DataMhsJpaController implements Serializable {
         }
     }
 
+    //DELETE
     public void destroy(String id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -131,6 +139,7 @@ public class DataMhsJpaController implements Serializable {
         }
     }
 
+    //READ (NIM)
     @ResponseBody
     @GetMapping(value = "/get/{nim}")
     public DataMhs findDataMhs(@PathVariable String nim) {
