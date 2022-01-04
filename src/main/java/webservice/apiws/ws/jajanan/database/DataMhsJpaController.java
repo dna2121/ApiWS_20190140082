@@ -13,6 +13,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import webservice.apiws.ws.jajanan.database.exceptions.NonexistentEntityException;
 import webservice.apiws.ws.jajanan.database.exceptions.PreexistingEntityException;
 
@@ -20,6 +27,7 @@ import webservice.apiws.ws.jajanan.database.exceptions.PreexistingEntityExceptio
  *
  * @author HP
  */
+@RestController
 public class DataMhsJpaController implements Serializable {
 
     public DataMhsJpaController(EntityManagerFactory emf) {
@@ -53,7 +61,9 @@ public class DataMhsJpaController implements Serializable {
         }
     }
 
-    public void edit(DataMhs dataMhs) throws NonexistentEntityException, Exception {
+    @ResponseBody
+    @RequestMapping(value = "/put/{nim}", method = RequestMethod.PUT)
+    public void edit(@RequestBody DataMhs dataMhs) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -63,9 +73,9 @@ public class DataMhsJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = dataMhs.getNim();
-                if (findDataMhs(id) == null) {
-                    throw new NonexistentEntityException("The dataMhs with id " + id + " no longer exists.");
+                String nim = dataMhs.getNim();
+                if (findDataMhs(nim) == null) {
+                    throw new NonexistentEntityException("The dataMhs with id " + nim + " no longer exists.");
                 }
             }
             throw ex;
@@ -121,10 +131,12 @@ public class DataMhsJpaController implements Serializable {
         }
     }
 
-    public DataMhs findDataMhs(String id) {
+    @ResponseBody
+    @GetMapping(value = "/get/{nim}")
+    public DataMhs findDataMhs(@PathVariable String nim) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DataMhs.class, id);
+            return em.find(DataMhs.class, nim);
         } finally {
             em.close();
         }
