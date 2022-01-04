@@ -47,8 +47,6 @@ public class DataMhsJpaController implements Serializable {
     }
 
     //CREATE
-//    @ResponseBody
-//    @PostMapping(value = "/post")
     public void create(@RequestBody DataMhs dataMhs) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
@@ -69,8 +67,6 @@ public class DataMhsJpaController implements Serializable {
     }
 
     //UPDATE
-    @ResponseBody
-    @RequestMapping(value = "/put/{nim}", method = RequestMethod.PUT)
     public void edit(@RequestBody DataMhs dataMhs) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -95,8 +91,6 @@ public class DataMhsJpaController implements Serializable {
     }
 
     //DELETE
-    @ResponseBody
-    @DeleteMapping(value = "/delete/{nim}")
     public void destroy(@PathVariable String nim) throws NonexistentEntityException {
         EntityManager em = null;
         try {
