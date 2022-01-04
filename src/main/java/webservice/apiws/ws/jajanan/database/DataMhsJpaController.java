@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,8 +47,8 @@ public class DataMhsJpaController implements Serializable {
     }
 
     //CREATE
-    @ResponseBody
-    @PostMapping(value = "/post")
+//    @ResponseBody
+//    @PostMapping(value = "/post")
     public void create(@RequestBody DataMhs dataMhs) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
@@ -94,17 +95,19 @@ public class DataMhsJpaController implements Serializable {
     }
 
     //DELETE
-    public void destroy(String id) throws NonexistentEntityException {
+    @ResponseBody
+    @DeleteMapping(value = "/delete/{nim}")
+    public void destroy(@PathVariable String nim) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             DataMhs dataMhs;
             try {
-                dataMhs = em.getReference(DataMhs.class, id);
+                dataMhs = em.getReference(DataMhs.class, nim);
                 dataMhs.getNim();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The dataMhs with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The dataMhs with id " + nim + " no longer exists.", enfe);
             }
             em.remove(dataMhs);
             em.getTransaction().commit();

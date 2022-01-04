@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import webservice.apiws.ws.jajanan.database.DataMhs;
 import webservice.apiws.ws.jajanan.database.DataMhsJpaController;
+import webservice.apiws.ws.jajanan.database.exceptions.NonexistentEntityException;
 
 /**
  *
@@ -37,17 +41,29 @@ public class dataController {
     }
     
     
-//    @PutMapping(value = "/put/{id}")
-//    public void editData(@RequestBody DataMhs dataMhs){
+    @ResponseBody
+    @DeleteMapping(value = "/del/{nim}")
+    public void deleteData(@PathVariable String nim){
+        DataMhsJpaController controller = new DataMhsJpaController();
+        
+        try {
+            controller.destroy(nim);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(dataController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    
+//    @ResponseBody
+//    @PostMapping(value = "/cre")
+//    public void createData(@RequestBody DataMhs dataMhs) throws Exception{
 //        DataMhsJpaController controller = new DataMhsJpaController();
-//        try{
-//            controller.edit(dataMhs);
-//        } catch (Exception ex) {
-//            Logger.getLogger(dataController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+//        
+//        controller.create(dataMhs);
+//    
 //    }
-   
-    
-    
+//    
+//    
     
 }
